@@ -24,7 +24,7 @@ final class Schedule {
 	/**
 	 * @var string
 	 */
-	public $expression = '* * * * *';
+	public $expression;
 
 	/**
 	 * @param array $values

@@ -15,7 +15,6 @@ use Ttree\Scheduler\Task\TaskInterface;
 use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Flow\Cli\CommandController;
 use TYPO3\Flow\Object\ObjectManagerInterface;
-use TYPO3\Flow\Persistence\PersistenceManagerInterface;
 
 /**
  * Task Command Controller
