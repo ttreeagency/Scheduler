@@ -67,4 +67,21 @@ class TaskRepository extends Repository {
 		return $query->execute();
 	}
 
+	/**
+	 * @param string $implementation
+	 * @param array $arguments
+	 * @return Task
+	 */
+	public function findOneByImplementationAndArguments($implementation, array $arguments) {
+		$argumentsHash = sha1(serialize($arguments));
+		$query = $this->createQuery();
+
+		$query->matching($query->logicalAnd(
+			$query->equals('implementation', $implementation),
+			$query->equals('argumentsHash', $argumentsHash)
+		));
+
+		return $query->execute()->getFirst();
+	}
+
 }
