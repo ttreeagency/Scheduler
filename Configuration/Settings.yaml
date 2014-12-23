@@ -2,4 +2,5 @@ TYPO3:
   Flow:
     object:
       excludeClasses:
+        'beberlei.assert' : ['.*']
         'mtdowling.cronexpression' : ['.*']
