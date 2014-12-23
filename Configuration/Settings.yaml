@@ -1,0 +1,5 @@
+TYPO3:
+  Flow:
+    object:
+      excludeClasses:
+        'mtdowling.cronexpression' : ['.*']

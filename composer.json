@@ -1,0 +1,14 @@
+{
+    "name": "ttree/scheduler",
+    "type": "typo3-flow-package",
+    "description": "Simple task scheduler for TYPO3 Flow package",
+    "require": {
+        "typo3/flow": "*",
+        "mtdowling/cron-expression": "*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Ttree\\Scheduler": "Classes"
+        }
+    }
+}
