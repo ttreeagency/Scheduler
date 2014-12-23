@@ -156,6 +156,7 @@ class Task {
 	 */
 	public function setExpression($expression) {
 		$this->expression = $expression;
+		$this->initializeNextExecution();
 	}
 
 	/**
