@@ -4,7 +4,8 @@
     "description": "Simple task scheduler for TYPO3 Flow package",
     "require": {
         "typo3/flow": "*",
-        "mtdowling/cron-expression": "*"
+        "mtdowling/cron-expression": "*",
+        "beberlei/assert": "*"
     },
     "autoload": {
         "psr-0": {
