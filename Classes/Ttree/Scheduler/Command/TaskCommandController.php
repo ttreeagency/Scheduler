@@ -67,15 +67,19 @@ class TaskCommandController extends CommandController {
 			unset($taskDescriptor['object']);
 			$tasks[] = $taskDescriptor;
 		}
-		$this->output->outputTable($tasks, array(
-			'Type',
-			'Status',
-			'Identifier',
-			'Interval',
-			'Implementation',
-			'Next Execution Date',
-			'Last Execution Date',
-		));
+		if (count($tasks)) {
+			$this->output->outputTable($tasks, array(
+				'Type',
+				'Status',
+				'Identifier',
+				'Interval',
+				'Implementation',
+				'Next Execution Date',
+				'Last Execution Date',
+			));
+		} else {
+			$this->outputLine('Empty task list ...');
+		}
 	}
 
 	/**
