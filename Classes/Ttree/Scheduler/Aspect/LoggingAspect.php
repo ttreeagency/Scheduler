@@ -36,7 +36,7 @@ class LoggingAspect {
 	protected $persistenceManager;
 
 	/**
-	 * @Flow\PointCut("within(Ttree\Scheduler\Task\TaskInterface) && method(.*->execute())")
+	 * @Flow\Pointcut("within(Ttree\Scheduler\Task\TaskInterface) && method(.*->execute())")
 	 */
 	public function allTasks() {}
 
