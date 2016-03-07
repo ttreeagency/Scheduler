@@ -72,6 +72,7 @@ class Task {
 
 	/**
 	 * @var CronExpression
+	 * @Flow\Transient
 	 */
 	protected $cronExpression;
 
