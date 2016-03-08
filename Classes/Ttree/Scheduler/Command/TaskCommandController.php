@@ -83,9 +83,9 @@ class TaskCommandController extends CommandController {
 	}
 
 	/**
-	 * Enable the given persistend class
+	 * Enable the given persistent class
 	 *
-	 * @param Task $task persistend task identifier, see task:list
+	 * @param Task $task persistent task identifier, see task:list
 	 */
 	public function enableCommand(Task $task) {
 		$task->enable();
@@ -93,9 +93,9 @@ class TaskCommandController extends CommandController {
 	}
 
 	/**
-	 * Disable the given persistend class
+	 * Disable the given persistent class
 	 *
-	 * @param Task $task persistend task identifier, see task:list
+	 * @param Task $task persistent task identifier, see task:list
 	 */
 	public function disableCommand(Task $task) {
 		$task->disable();
@@ -103,7 +103,7 @@ class TaskCommandController extends CommandController {
 	}
 
 	/**
-	 * Register a persistend task
+	 * Register a persistent task
 	 *
 	 * @param string $expression cron expression for the task scheduling
 	 * @param string $task task class implementation
