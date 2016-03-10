@@ -196,7 +196,7 @@ class Task {
 	 */
 	public function execute(ObjectManagerInterface $objectManager) {
 		/** @var TaskInterface $task */
-		$task = $objectManager->get($this->implementation);
+		$task = $objectManager->get($this->implementation, $this);
 		$task->execute($this->arguments);
 		$this->lastExecution = new \DateTime('now');
 		$this->initializeNextExecution();
