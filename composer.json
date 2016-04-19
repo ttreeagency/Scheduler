@@ -2,6 +2,8 @@
     "name": "ttree/scheduler",
     "type": "typo3-flow-package",
     "description": "Simple task scheduler for TYPO3 Flow package",
+    "license": "MIT",
+    "keywords": ["cron", "scheduler", "task", "runner"],
     "require": {
         "typo3/flow": "*",
         "mtdowling/cron-expression": "*",
