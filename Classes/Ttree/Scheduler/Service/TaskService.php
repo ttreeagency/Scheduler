@@ -194,6 +194,14 @@ class TaskService {
 
 	/**
 	 * @param Task $task
+	 */
+	public function remove(Task $task)
+	{
+		$this->taskRepository->remove($task);
+	}
+
+	/**
+	 * @param Task $task
 	 * @param string $type
 	 */
 	public function update(Task $task, $type) {

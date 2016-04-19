@@ -83,6 +83,14 @@ class TaskCommandController extends CommandController {
 	}
 
 	/**
+	 * @param Task $task
+	 */
+	public function removeCommand(Task $task)
+	{
+		$this->taskService->remove($task);
+	}
+
+	/**
 	 * Enable the given persistent class
 	 *
 	 * @param Task $task persistent task identifier, see task:list
