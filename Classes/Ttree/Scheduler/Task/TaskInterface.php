@@ -1,5 +1,6 @@
 <?php
 namespace Ttree\Scheduler\Task;
+
 /*                                                                        *
  * This script belongs to the TYPO3 Flow package "Ttree.Scheduler".       *
  *                                                                        *
@@ -13,15 +14,15 @@ use TYPO3\Flow\Annotations as Flow;
 /**
  * Schedule Task
  */
-interface TaskInterface {
+interface TaskInterface
+{
 
-	const TYPE_PERSISTED = 'Persisted';
-	const TYPE_DYNAMIC = 'Dynamic';
+    const TYPE_PERSISTED = 'Persisted';
+    const TYPE_DYNAMIC = 'Dynamic';
 
-	/**
-	 * @param array
-	 * @return void
-	 */
-	public function execute(array $arguments = array());
-
+    /**
+     * @param array
+     * @return void
+     */
+    public function execute(array $arguments = []);
 }

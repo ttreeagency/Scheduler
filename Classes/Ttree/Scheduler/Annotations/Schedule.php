@@ -1,5 +1,6 @@
 <?php
 namespace Ttree\Scheduler\Annotations;
+
 /*                                                                        *
  * This script belongs to the TYPO3 Flow package "Ttree.Scheduler".       *
  *                                                                        *
@@ -19,22 +20,23 @@ use TYPO3\Flow\Persistence\PersistenceManagerInterface;
  * @Annotation
  * @Target("CLASS")
  */
-final class Schedule {
+final class Schedule
+{
 
-	/**
-	 * @var string
-	 */
-	public $expression;
+    /**
+     * @var string
+     */
+    public $expression;
 
-	/**
-	 * @param array $values
-	 */
-	public function __construct(array $values) {
-		if (isset($values['expression'])) {
-			$this->expression = (string)$values['expression'];
-		} else {
-			$this->expression = '* * * * *';
-		}
-	}
-
+    /**
+     * @param array $values
+     */
+    public function __construct(array $values)
+    {
+        if (isset($values['expression'])) {
+            $this->expression = (string)$values['expression'];
+        } else {
+            $this->expression = '* * * * *';
+        }
+    }
 }
