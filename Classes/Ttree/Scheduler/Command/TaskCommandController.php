@@ -90,6 +90,24 @@ class TaskCommandController extends CommandController {
 		$this->taskService->remove($task);
 	}
 
+    /**
+     * Run a single persisted task ignoring status and schedule.
+     *
+     * @param Task $task
+     */
+    public function runSingleCommand(Task $task) {
+        $taskDescriptor = $this->taskService->getTaskDescriptor(TaskInterface::TYPE_PERSISTED, $task);
+        $arguments = [$task->getImplementation(), $taskDescriptor['identifier'] ?: $taskDescriptor['type']];
+
+        try {
+            $taskDescriptor['object']->execute($this->objectManager);
+            $this->taskService->update($task, $taskDescriptor['type']);
+            $this->tellStatus('[Success] Run "%s" (%s)', $arguments);
+        } catch (\Exception $exception) {
+            $this->tellStatus('[Error] Task "%s" (%s) throw an exception, check your log', $arguments);
+        }
+    }
+
 	/**
 	 * Enable the given persistent class
 	 *
