@@ -15,23 +15,21 @@ use TYPO3\Flow\Annotations as Flow;
  * @Annotation
  * @Target("CLASS")
  */
-final class Schedule
+final class Meta
 {
 
     /**
      * @var string
      */
-    public $expression;
+    public $description = '';
 
     /**
      * @param array $values
      */
     public function __construct(array $values)
     {
-        if (isset($values['expression'])) {
-            $this->expression = (string)$values['expression'];
-        } else {
-            $this->expression = '* * * * *';
+        if (isset($values['description'])) {
+            $this->description = (string)$values['description'];
         }
     }
 }

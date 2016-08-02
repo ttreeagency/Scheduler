@@ -79,16 +79,23 @@ class Task
     protected $cronExpression;
 
     /**
+     * @var string
+     */
+    protected $description;
+    
+    /**
      * @param string $expression
      * @param string $implementation
      * @param array $arguments
+     * @param string $description
      */
-    public function __construct($expression, $implementation, array $arguments = [])
+    public function __construct($expression, $implementation, array $arguments = [], $description = '')
     {
         $this->disable();
         $this->setExpression($expression);
         $this->setImplementation($implementation);
         $this->setArguments($arguments);
+        $this->setDescription($description);
         $this->creationDate = new \DateTime('now');
         $this->initializeNextExecution();
     }
@@ -254,5 +261,21 @@ class Task
         } else {
             return clone $this->nextExecution;
         }
+    }
+
+    /**
+     * @return String
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param String $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
     }
 }
