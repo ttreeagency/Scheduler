@@ -67,7 +67,7 @@ class TaskService
     public static function getAllTaskImplementations(ObjectManagerInterface $objectManager)
     {
         /** @var ReflectionService $reflectionService */
-        $reflectionService = $objectManager->get('TYPO3\Flow\Reflection\ReflectionService');
+        $reflectionService = $objectManager->get(ReflectionService::class);
         return $reflectionService->getAllImplementationClassNamesForInterface(self::TASK_INTERFACE);
     }
 
@@ -81,15 +81,14 @@ class TaskService
         $tasks = [];
         /** @var ReflectionService $reflectionService */
         $reflectionService = $objectManager->get(ReflectionService::class);
-        foreach (self::getAllTaskImplementations($objectManager) as $className) {
 
+        foreach (self::getAllTaskImplementations($objectManager) as $className) {
             if (!$reflectionService->isClassAnnotatedWith($className, Annotations\Schedule::class)) {
                 continue;
             }
-
-            /** @var Annotations\Schedule $scheduleAnnotation */
+            /** @var Schedule $scheduleAnnotation */
             $scheduleAnnotation = $reflectionService->getClassAnnotation($className, Annotations\Schedule::class);
-            $task = [
+            $tasks[$className] = [
                 'implementation' => $className,
                 'expression' => $scheduleAnnotation->expression,
                 'description' => ''
@@ -98,10 +97,8 @@ class TaskService
             if($reflectionService->isClassAnnotatedWith($className, Annotations\Meta::class)) {
                 /** @var Annotations\Meta $metaAnnotation */
                 $metaAnnotation = $reflectionService->getClassAnnotation($className, Annotations\Meta::class);
-                $task['description'] = $metaAnnotation->description;
+                $tasks[$className]['description'] = $metaAnnotation->description;
             }
-
-            $tasks[] = $task;
         }
 
         return $tasks;
@@ -148,7 +145,7 @@ class TaskService
         $tasks = [];
         foreach ($this->taskRepository->findAll() as $task) {
             /** @var Task $task */
-            $tasks[] = $this->getTaskDescriptor(TaskInterface::TYPE_PERSISTED, $task);
+            $tasks[$this->persistenceManager->getIdentifierByObject($task)] = $this->getTaskDescriptor(TaskInterface::TYPE_PERSISTED, $task);
         }
         return $tasks;
     }
@@ -173,8 +170,8 @@ class TaskService
             $taskDecriptor = $this->getTaskDescriptor(TaskInterface::TYPE_DYNAMIC, $task);
 
             $taskDecriptor['lastExecution'] = $lastExecution instanceof \DateTime ? $lastExecution->format(\DateTime::ISO8601) : '';
-            $taskDecriptor['identifier'] = '';
-            $tasks[] = $taskDecriptor;
+            $taskDecriptor['identifier'] = md5($dynamicTask['implementation']);
+            $tasks[$taskDecriptor['identifier']] = $taskDecriptor;
         }
         return $tasks;
     }
@@ -247,7 +244,7 @@ class TaskService
      */
     protected function cleanupAndSortTaskList(array $tasks)
     {
-        usort($tasks, function ($a, $b) {
+        uasort($tasks, function ($a, $b) {
             return $a['nextExecutionTimestamp'] > $b['nextExecutionTimestamp'];
         });
 

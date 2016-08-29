@@ -45,7 +45,7 @@ class TaskCommandController extends CommandController
         foreach ($this->taskService->getDueTasks() as $taskDescriptor) {
             /** @var Task $task */
             $task = $taskDescriptor['object'];
-            $arguments = [$task->getImplementation(), $taskDescriptor['identifier'] ?: $taskDescriptor['type']];
+            $arguments = [$task->getImplementation(), $taskDescriptor['identifier']];
             try {
                 if (!$dryRun) {
                     $task->execute($this->objectManager);
@@ -90,11 +90,17 @@ class TaskCommandController extends CommandController
     /**
      * Run a single persisted task ignoring status and schedule.
      *
-     * @param Task $task
+     * @param string $taskIdentifier
      */
-    public function runSingleCommand(Task $task) {
-        $taskDescriptor = $this->taskService->getTaskDescriptor(TaskInterface::TYPE_PERSISTED, $task);
-        $arguments = [$task->getImplementation(), $taskDescriptor['identifier'] ?: $taskDescriptor['type']];
+    public function runSingleCommand($taskIdentifier) {
+
+        $taskDescriptors = $this->taskService->getTasks();
+        Assertion::keyExists($taskDescriptors, $taskIdentifier, sprintf('Task with identifier %s does not exist.', $taskIdentifier));
+
+        $taskDescriptor = $taskDescriptors[$taskIdentifier];
+        /** @var Task $task */
+        $task = $taskDescriptor['object'];
+        $arguments = [$task->getImplementation(), $taskDescriptor['identifier']];
 
         try {
             $taskDescriptor['object']->execute($this->objectManager);
