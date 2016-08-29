@@ -38,6 +38,14 @@ class MyTask implements \Ttree\Scheduler\Task\TaskInterface {
 This task will be executed every minute. Dynamic task do not support arguments, the ``$arguments`` of the execute method
 is always an empty array.
 
+You can also add a description to your task using the Meta annotation::
+
+```php
+use Ttree\Scheduler\Annotations as Scheduler;
+/**
+ * @Scheduler\Meta(description="Describes your task.")
+ */
+```
 
 Persisted Tasks
 ---------------
@@ -57,6 +65,10 @@ List all available tasks (dynamic and persisted):
 Run all due tasks (dynamic and persisted):
 
 	flow task:run
+
+Directly run a single task:
+
+	flow task:runSingle --task [identifier]
 
 Enable a persisted task:
 

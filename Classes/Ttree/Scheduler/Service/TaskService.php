@@ -10,7 +10,6 @@ namespace Ttree\Scheduler\Service;
  *                                                                        */
 
 use Assert\Assertion;
-use Ttree\Scheduler\Annotations\Schedule;
 use Ttree\Scheduler\Domain\Model\Task;
 use Ttree\Scheduler\Domain\Repository\TaskRepository;
 use Ttree\Scheduler\Task\TaskInterface;
@@ -20,6 +19,7 @@ use TYPO3\Flow\Object\ObjectManagerInterface;
 use TYPO3\Flow\Persistence\PersistenceManagerInterface;
 use TYPO3\Flow\Reflection\ReflectionService;
 use TYPO3\Flow\Utility\Now;
+use Ttree\Scheduler\Annotations;
 
 /**
  * Task Service
@@ -80,17 +80,28 @@ class TaskService
     {
         $tasks = [];
         /** @var ReflectionService $reflectionService */
-        $reflectionService = $objectManager->get('TYPO3\Flow\Reflection\ReflectionService');
+        $reflectionService = $objectManager->get(ReflectionService::class);
         foreach (self::getAllTaskImplementations($objectManager) as $className) {
-            if (!$reflectionService->isClassAnnotatedWith($className, 'Ttree\Scheduler\Annotations\Schedule')) {
+
+            if (!$reflectionService->isClassAnnotatedWith($className, Annotations\Schedule::class)) {
                 continue;
             }
-            /** @var Schedule $scheduleAnnotation */
-            $scheduleAnnotation = $reflectionService->getClassAnnotation($className, 'Ttree\Scheduler\Annotations\Schedule');
-            $tasks[] = [
+
+            /** @var Annotations\Schedule $scheduleAnnotation */
+            $scheduleAnnotation = $reflectionService->getClassAnnotation($className, Annotations\Schedule::class);
+            $task = [
                 'implementation' => $className,
-                'expression' => $scheduleAnnotation->expression
+                'expression' => $scheduleAnnotation->expression,
+                'description' => ''
             ];
+
+            if($reflectionService->isClassAnnotatedWith($className, Annotations\Meta::class)) {
+                /** @var Annotations\Meta $metaAnnotation */
+                $metaAnnotation = $reflectionService->getClassAnnotation($className, Annotations\Meta::class);
+                $task['description'] = $metaAnnotation->description;
+            }
+
+            $tasks[] = $task;
         }
 
         return $tasks;
@@ -152,7 +163,7 @@ class TaskService
         $now = new Now();
 
         foreach (self::getAllDynamicTaskImplementations($this->objectManager) as $dynamicTask) {
-            $task = new Task($dynamicTask['expression'], $dynamicTask['implementation']);
+            $task = new Task($dynamicTask['expression'], $dynamicTask['implementation'], [], $dynamicTask['description']);
             $cacheKey = md5($dynamicTask['implementation']);
             $lastExecution = $this->dynamicTaskLastExecutionCache->get($cacheKey);
             if ($dueOnly && ($lastExecution instanceof \DateTime && $now < $task->getNextExecution($lastExecution))) {
@@ -185,6 +196,7 @@ class TaskService
             'nextExecution' => $task->getNextExecution() ? $task->getNextExecution()->format(\DateTime::ISO8601) : '',
             'nextExecutionTimestamp' => $task->getNextExecution() ? $task->getNextExecution()->getTimestamp() : 0,
             'lastExecution' => $task->getLastExecution() ? $task->getLastExecution()->format(\DateTime::ISO8601) : '',
+            'description' => $task->getDescription(),
             'object' => $task
         ];
     }
@@ -193,11 +205,12 @@ class TaskService
      * @param string $expression
      * @param string $task
      * @param array $arguments
+     * @param string $description
      * @return Task
      */
-    public function create($expression, $task, array $arguments)
+    public function create($expression, $task, array $arguments, $description)
     {
-        $task = new Task($expression, $task, $arguments);
+        $task = new Task($expression, $task, $arguments, $description);
         $this->assertValidTask($task);
         $this->taskRepository->add($task);
         return $task;

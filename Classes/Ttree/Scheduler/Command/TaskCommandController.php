@@ -80,6 +80,7 @@ class TaskCommandController extends CommandController
                 'Implementation',
                 'Next Execution Date',
                 'Last Execution Date',
+                'Description'
             ]);
         } else {
             $this->outputLine('Empty task list ...');
@@ -140,14 +141,15 @@ class TaskCommandController extends CommandController
      * @param string $expression cron expression for the task scheduling
      * @param string $task task class implementation
      * @param string $arguments task arguments, can be a valid JSON array
+     * @param string $description task description
      */
-    public function registerCommand($expression, $task, $arguments = null)
+    public function registerCommand($expression, $task, $arguments = null, $description = '')
     {
         if ($arguments !== null) {
             $arguments = json_decode($arguments, true);
             Assertion::isArray($arguments, 'Arguments is not a valid JSON array');
         }
-        $this->taskService->create($expression, $task, $arguments ?: []);
+        $this->taskService->create($expression, $task, $arguments ?: [], $description);
     }
 
     /**
