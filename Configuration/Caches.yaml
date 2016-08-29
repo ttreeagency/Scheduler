@@ -1,2 +1,3 @@
 TtreeScheduler_DynamicTaskLastExecution:
   frontend: TYPO3\Flow\Cache\Frontend\VariableFrontend
+  persistent: true
