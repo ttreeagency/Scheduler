@@ -4,3 +4,7 @@ TYPO3:
       excludeClasses:
         'beberlei.assert' : ['.*']
         'mtdowling.cronexpression' : ['.*']
+
+Ttree:
+  Scheduler:
+    allowParallelExecution: true

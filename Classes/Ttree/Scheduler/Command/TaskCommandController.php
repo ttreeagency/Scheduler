@@ -16,6 +16,8 @@ use Ttree\Scheduler\Task\TaskInterface;
 use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Flow\Cli\CommandController;
 use TYPO3\Flow\Object\ObjectManagerInterface;
+use TYPO3\Flow\Utility\Lock\Lock;
+use TYPO3\Flow\Utility\Lock\LockNotAcquiredException;
 
 /**
  * Task Command Controller
@@ -36,16 +38,38 @@ class TaskCommandController extends CommandController
     protected $objectManager;
 
     /**
+     * @Flow\InjectConfiguration(package="Ttree.Scheduler", path="allowParallelExecution")
+     * @var boolean
+     */
+    protected $allowParallelExecution = true;
+
+    /**
+     * @var Lock
+     */
+    protected $parallelExecutionLock;
+
+    /**
      * Run all pending task
      *
      * @param boolean $dryRun do not execute tasks
      */
     public function runCommand($dryRun = false)
     {
+
+        if($this->allowParallelExecution !== true) {
+            try {
+                $this->parallelExecutionLock = new Lock('Ttree.Scheduler.ParallelExecutionLock');
+            } catch (LockNotAcquiredException $exception) {
+                $this->tellStatus('The scheduler is already running and parallel execution is disabled.');
+                $this->sendAndExit(0);
+            }
+        }
+
         foreach ($this->taskService->getDueTasks() as $taskDescriptor) {
             /** @var Task $task */
             $task = $taskDescriptor['object'];
             $arguments = [$task->getImplementation(), $taskDescriptor['identifier']];
+
             try {
                 if (!$dryRun) {
                     $task->execute($this->objectManager);
@@ -58,6 +82,8 @@ class TaskCommandController extends CommandController
                 $this->tellStatus('[Error] Task "%s" (%s) throw an exception, check your log', $arguments);
             }
         }
+
+        $this->parallelExecutionLock->release();
     }
 
     /**
