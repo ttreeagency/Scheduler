@@ -29,7 +29,7 @@ final class Schedule
     public function __construct(array $values)
     {
         if (isset($values['expression'])) {
-            $this->expression = (string)$values['expression'];
+            $this->expression = stripslashes((string)$values['expression']);
         } else {
             $this->expression = '* * * * *';
         }
