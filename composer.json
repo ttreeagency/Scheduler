@@ -1,9 +1,9 @@
 {
     "name": "ttree/scheduler",
     "type": "typo3-flow-package",
-    "description": "Simple task scheduler for TYPO3 Flow package",
+    "description": "Flow Framework & Neos Task Scheduler",
     "license": "MIT",
-    "keywords": ["cron", "scheduler", "task", "runner"],
+    "keywords": ["Flow", "Flow framework", "Neos", "Neos CMS", "cron", "scheduler", "task", "runner"],
     "require": {
         "typo3/flow": "*",
         "mtdowling/cron-expression": "*",
