@@ -55,6 +55,14 @@ multiple times, if your arguments are different between each task. You can pass 
 
     flow task:register --expression "* */3 * * *" --task "Ttree\Aggregator\Task\AggregatorTask" --arguments '{"node": "af97b530-0c70-7b87-3cf4-f9a611f88c18"}'
 
+Available Configuration Options
+-------------------------------
+
+| Option                 | Default | Description                                                                                                                                   |
+|------------------------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| allowParallelExecution | true    | If the scheduler command is executed while the scheduler is already running tasks, the second scheduler waits until the first one is finished |
+
+
 Available CLI helpers
 ---------------------
 
