@@ -2,7 +2,7 @@ Ttree\Scheduler\Service\TaskService:
   properties:
     dynamicTaskLastExecutionCache:
       object:
-        factoryObjectName: TYPO3\Flow\Cache\CacheManager
+        factoryObjectName: Neos\Flow\Cache\CacheManager
         factoryMethodName: getCache
         arguments:
           1:
