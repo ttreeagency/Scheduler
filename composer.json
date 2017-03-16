@@ -15,8 +15,8 @@
         "beberlei/assert": "*"
     },
     "autoload": {
-        "psr-0": {
-            "Ttree\\Scheduler": "Classes"
+        "psr-4": {
+            "Ttree\\Scheduler\\": "Classes"
         }
     }
 }
