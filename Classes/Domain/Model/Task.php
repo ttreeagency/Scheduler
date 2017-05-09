@@ -2,7 +2,7 @@
 namespace Ttree\Scheduler\Domain\Model;
 
 /*                                                                        *
- * This script belongs to the TYPO3 Flow package "Ttree.Scheduler".       *
+ * This script belongs to the Neos Flow package "Ttree.Scheduler".       *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU General Public License, either version 3 of the   *
@@ -12,9 +12,9 @@ namespace Ttree\Scheduler\Domain\Model;
 use Cron\CronExpression;
 use Doctrine\ORM\Mapping as ORM;
 use Ttree\Scheduler\Task\TaskInterface;
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Flow\Object\ObjectManagerInterface;
-use TYPO3\Flow\Utility\Now;
+use Neos\Flow\Annotations as Flow;
+use Neos\Flow\ObjectManagement\ObjectManagerInterface;
+use Neos\Flow\Utility\Now;
 
 /**
  * Schedule Task

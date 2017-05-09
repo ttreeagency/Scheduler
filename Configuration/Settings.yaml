@@ -1,10 +1,11 @@
-TYPO3:
-  Flow:
-    object:
-      excludeClasses:
-        'beberlei.assert' : ['.*']
-        'mtdowling.cronexpression' : ['.*']
-
 Ttree:
   Scheduler:
     allowParallelExecution: true
+Neos:
+  Flow:
+    object:
+      excludeClasses:
+        beberlei.assert:
+          - '.*'
+        mtdowling.cronexpression:
+          - '.*'

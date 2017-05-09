@@ -2,7 +2,7 @@
 namespace Ttree\Scheduler\Service;
 
 /*                                                                        *
- * This script belongs to the TYPO3 Flow package "Ttree.Scheduler".       *
+ * This script belongs to the Neos Flow package "Ttree.Scheduler".       *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU General Public License, either version 3 of the   *
@@ -13,12 +13,12 @@ use Assert\Assertion;
 use Ttree\Scheduler\Domain\Model\Task;
 use Ttree\Scheduler\Domain\Repository\TaskRepository;
 use Ttree\Scheduler\Task\TaskInterface;
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Flow\Cache\Frontend\VariableFrontend;
-use TYPO3\Flow\Object\ObjectManagerInterface;
-use TYPO3\Flow\Persistence\PersistenceManagerInterface;
-use TYPO3\Flow\Reflection\ReflectionService;
-use TYPO3\Flow\Utility\Now;
+use Neos\Flow\Annotations as Flow;
+use Neos\Cache\Frontend\VariableFrontend;
+use Neos\Flow\ObjectManagement\ObjectManagerInterface;
+use Neos\Flow\Persistence\PersistenceManagerInterface;
+use Neos\Flow\Reflection\ReflectionService;
+use Neos\Flow\Utility\Now;
 use Ttree\Scheduler\Annotations;
 
 /**

@@ -2,7 +2,7 @@
 namespace Ttree\Scheduler\Aspect;
 
 /*                                                                        *
- * This script belongs to the TYPO3 Flow package "Ttree.Scheduler".       *
+ * This script belongs to the Neos Flow package "Ttree.Scheduler".       *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU General Public License, either version 3 of the   *
@@ -11,10 +11,10 @@ namespace Ttree\Scheduler\Aspect;
 
 use Ttree\Scheduler\Domain\Model\Task;
 use Ttree\Scheduler\Task\TaskInterface;
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Flow\Aop\JoinPoint;
-use TYPO3\Flow\Log\SystemLoggerInterface;
-use TYPO3\Flow\Persistence\PersistenceManagerInterface;
+use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Aop\JoinPoint;
+use Neos\Flow\Log\SystemLoggerInterface;
+use Neos\Flow\Persistence\PersistenceManagerInterface;
 
 /**
  * Task Execution Logger
