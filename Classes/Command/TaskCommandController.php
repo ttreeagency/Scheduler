@@ -2,7 +2,7 @@
 namespace Ttree\Scheduler\Command;
 
 /*                                                                        *
- * This script belongs to the TYPO3 Flow package "Ttree.Scheduler".       *
+ * This script belongs to the Neos Flow package "Ttree.Scheduler".       *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU General Public License, either version 3 of the   *
@@ -13,11 +13,11 @@ use Assert\Assertion;
 use Ttree\Scheduler\Domain\Model\Task;
 use Ttree\Scheduler\Service\TaskService;
 use Ttree\Scheduler\Task\TaskInterface;
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Flow\Cli\CommandController;
-use TYPO3\Flow\Object\ObjectManagerInterface;
-use TYPO3\Flow\Utility\Lock\Lock;
-use TYPO3\Flow\Utility\Lock\LockNotAcquiredException;
+use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Cli\CommandController;
+use Neos\Flow\ObjectManagement\ObjectManagerInterface;
+use Neos\Utility\Lock\Lock;
+use Neos\Utility\Lock\LockNotAcquiredException;
 
 /**
  * Task Command Controller

@@ -2,7 +2,7 @@
 namespace Ttree\Scheduler\Domain\Repository;
 
 /*                                                                        *
- * This script belongs to the TYPO3 Flow package "Ttree.Scheduler".       *
+ * This script belongs to the Neos Flow package "Ttree.Scheduler".       *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU General Public License, either version 3 of the   *
@@ -10,10 +10,10 @@ namespace Ttree\Scheduler\Domain\Repository;
  *                                                                        */
 
 use Ttree\Scheduler\Domain\Model\Task;
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Flow\Persistence\QueryInterface;
-use TYPO3\Flow\Persistence\Repository;
-use TYPO3\Flow\Utility\Now;
+use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Persistence\QueryInterface;
+use Neos\Flow\Persistence\Repository;
+use Neos\Flow\Utility\Now;
 
 /**
  * Schedule Task
@@ -41,7 +41,7 @@ class TaskRepository extends Repository
     }
 
     /**
-     * @return \TYPO3\Flow\Persistence\QueryResultInterface
+     * @return \Neos\Flow\Persistence\QueryResultInterface
      */
     public function findDueTasks()
     {
@@ -59,7 +59,7 @@ class TaskRepository extends Repository
 
     /**
      * @param boolean $showDisabled
-     * @return \TYPO3\Flow\Persistence\QueryResultInterface
+     * @return \Neos\Flow\Persistence\QueryResultInterface
      */
     public function findAllTasks($showDisabled = false)
     {
