@@ -1,7 +1,7 @@
 {
     "name": "ttree/scheduler",
     "type": "neos-package",
-    "description": "Simple task scheduler for TYPO3 Flow package",
+    "description": "Simple task scheduler for Neos Flow Framework",
     "license": "MIT",
     "keywords": [
         "cron",
@@ -10,9 +10,9 @@
         "runner"
     ],
     "require": {
-        "neos/flow": "*",
-        "mtdowling/cron-expression": "*",
-        "beberlei/assert": "*"
+        "neos/flow": "^4.0",
+        "mtdowling/cron-expression": "^1.2",
+        "beberlei/assert": "^2.7"
     },
     "autoload": {
         "psr-4": {
