@@ -222,8 +222,7 @@ class Task
         /** @var TaskInterface $task */
         $task = $objectManager->get($this->implementation, $this);
         $task->execute($this->arguments);
-        $this->lastExecution = new \DateTime('now');
-        $this->initializeNextExecution();
+        $this->markAsRun();
     }
 
     /**
@@ -277,5 +276,11 @@ class Task
     public function setDescription($description)
     {
         $this->description = $description;
+    }
+
+    public function markAsRun()
+    {
+        $this->lastExecution = new \DateTime('now');
+        $this->initializeNextExecution();
     }
 }

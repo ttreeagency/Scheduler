@@ -73,14 +73,15 @@ class TaskCommandController extends CommandController
             try {
                 if (!$dryRun) {
                     $task->execute($this->objectManager);
-                    $this->taskService->update($task, $taskDescriptor['type']);
                     $this->tellStatus('[Success] Run "%s" (%s)', $arguments);
                 } else {
                     $this->tellStatus('[Skipped, dry run] Skipped "%s" (%s)', $arguments);
                 }
             } catch (\Exception $exception) {
+                $task->markAsRun();
                 $this->tellStatus('[Error] Task "%s" (%s) throw an exception, check your log', $arguments);
             }
+            $this->taskService->update($task, $taskDescriptor['type']);
         }
 
         $this->parallelExecutionLock->release();
@@ -130,11 +131,13 @@ class TaskCommandController extends CommandController
 
         try {
             $taskDescriptor['object']->execute($this->objectManager);
-            $this->taskService->update($task, $taskDescriptor['type']);
             $this->tellStatus('[Success] Run "%s" (%s)', $arguments);
         } catch (\Exception $exception) {
+            $task->markAsRun();
             $this->tellStatus('[Error] Task "%s" (%s) throw an exception, check your log', $arguments);
         }
+
+        $this->taskService->update($task, $taskDescriptor['type']);
     }
 
     /**
@@ -192,5 +195,16 @@ class TaskCommandController extends CommandController
     {
         $message = vsprintf($message, $arguments);
         $this->outputLine('%s: %s', [date(\DateTime::ISO8601), $message]);
+    }
+
+    /**
+     * @param Task $task
+     * @param string $taskType
+     */
+    protected function markFailedTaskAsRun(Task $task, $taskType)
+    {
+        $task->setLastExecution(new \DateTime());
+        $task->initializeNextExecution();
+        $this->taskService->update($task, $taskType);
     }
 }
