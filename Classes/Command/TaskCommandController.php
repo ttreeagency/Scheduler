@@ -56,7 +56,7 @@ class TaskCommandController extends CommandController
     public function runCommand($dryRun = false)
     {
 
-        if($this->allowParallelExecution !== true) {
+        if ($this->allowParallelExecution !== true) {
             try {
                 $this->parallelExecutionLock = new Lock('Ttree.Scheduler.ParallelExecutionLock');
             } catch (LockNotAcquiredException $exception) {
@@ -84,7 +84,9 @@ class TaskCommandController extends CommandController
             $this->taskService->update($task, $taskDescriptor['type']);
         }
 
-        $this->parallelExecutionLock->release();
+        if ($this->parallelExecutionLock instanceof Lock) {
+            $this->parallelExecutionLock->release();
+        }
     }
 
     /**
@@ -119,7 +121,8 @@ class TaskCommandController extends CommandController
      *
      * @param string $taskIdentifier
      */
-    public function runSingleCommand($taskIdentifier) {
+    public function runSingleCommand($taskIdentifier)
+    {
 
         $taskDescriptors = $this->taskService->getTasks();
         Assertion::keyExists($taskDescriptors, $taskIdentifier, sprintf('Task with identifier %s does not exist.', $taskIdentifier));
