@@ -38,6 +38,8 @@ class MyTask implements \Ttree\Scheduler\Task\TaskInterface {
 This task will be executed every minute. Dynamic task do not support arguments, the ``$arguments`` of the execute method
 is always an empty array.
 
+If your expression contains slashes, you have to double-escape them. I.e. run the task every 5 minutes: `@Scheduler\Schedule(expression="*\\/5 * * * *")`
+
 You can also add a description to your task using the Meta annotation::
 
 ```php
