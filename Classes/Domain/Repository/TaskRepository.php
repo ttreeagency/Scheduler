@@ -9,6 +9,8 @@ namespace Ttree\Scheduler\Domain\Repository;
  * License, or (at your option) any later version.                        *
  *                                                                        */
 
+use Neos\Flow\Persistence\Exception\InvalidQueryException;
+use Neos\Flow\Persistence\QueryResultInterface;
 use Ttree\Scheduler\Domain\Model\Task;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Persistence\QueryInterface;
@@ -41,7 +43,8 @@ class TaskRepository extends Repository
     }
 
     /**
-     * @return \Neos\Flow\Persistence\QueryResultInterface
+     * @return QueryResultInterface
+     * @throws InvalidQueryException
      */
     public function findDueTasks()
     {
@@ -59,7 +62,7 @@ class TaskRepository extends Repository
 
     /**
      * @param boolean $showDisabled
-     * @return \Neos\Flow\Persistence\QueryResultInterface
+     * @return QueryResultInterface
      */
     public function findAllTasks($showDisabled = false)
     {

@@ -9,11 +9,11 @@ namespace Ttree\Scheduler\Aspect;
  * License, or (at your option) any later version.                        *
  *                                                                        */
 
+use Psr\Log\LoggerInterface;
 use Ttree\Scheduler\Domain\Model\Task;
 use Ttree\Scheduler\Task\TaskInterface;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Aop\JoinPoint;
-use Neos\Flow\Log\SystemLoggerInterface;
 use Neos\Flow\Persistence\PersistenceManagerInterface;
 
 /**
@@ -27,9 +27,9 @@ class LoggingAspect
 
     /**
      * @Flow\Inject
-     * @var SystemLoggerInterface
+     * @var LoggerInterface
      */
-    protected $systemLogger;
+    protected $logger;
 
     /**
      * @Flow\Inject
@@ -52,7 +52,7 @@ class LoggingAspect
     {
         /** @var TaskInterface $task */
         $task = $jointPoint->getProxy();
-        $this->systemLogger->log(sprintf('Task "%s" execution started', get_class($task)));
+        $this->logger->info(sprintf('Task "%s" execution started', get_class($task)));
     }
 
     /**
@@ -63,7 +63,7 @@ class LoggingAspect
     {
         /** @var Task $task */
         $task = $jointPoint->getProxy();
-        $this->systemLogger->log(sprintf('Task "%s" execution finished', get_class($task)));
+        $this->logger->info(sprintf('Task "%s" execution finished', get_class($task)));
     }
 
     /**
@@ -75,7 +75,7 @@ class LoggingAspect
     {
         /** @var Task $task */
         $exception = $jointPoint->getException();
-        $this->systemLogger->logException($exception, [
+        $this->logger->logException($exception, [
             'task' => $jointPoint->getClassName()
         ]);
     }

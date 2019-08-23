@@ -10,6 +10,12 @@ namespace Ttree\Scheduler\Service;
  *                                                                        */
 
 use Assert\Assertion;
+use Assert\AssertionFailedException;
+use DateTime;
+use Exception;
+use InvalidArgumentException;
+use Neos\Flow\Persistence\Exception\IllegalObjectTypeException;
+use Neos\Flow\Persistence\Exception\InvalidQueryException;
 use Ttree\Scheduler\Domain\Model\Task;
 use Ttree\Scheduler\Domain\Repository\TaskRepository;
 use Ttree\Scheduler\Task\TaskInterface;
@@ -86,7 +92,7 @@ class TaskService
             if (!$reflectionService->isClassAnnotatedWith($className, Annotations\Schedule::class)) {
                 continue;
             }
-            /** @var Schedule $scheduleAnnotation */
+            /** @var Annotations\Schedule $scheduleAnnotation */
             $scheduleAnnotation = $reflectionService->getClassAnnotation($className, Annotations\Schedule::class);
             $tasks[$className] = [
                 'implementation' => $className,
@@ -106,6 +112,8 @@ class TaskService
 
     /**
      * @return array
+     * @throws AssertionFailedException
+     * @throws InvalidQueryException
      */
     public function getDueTasks()
     {
@@ -116,6 +124,8 @@ class TaskService
 
     /**
      * @return array
+     * @throws AssertionFailedException
+     * @throws InvalidQueryException
      */
     public function getDuePersistedTasks()
     {
@@ -129,6 +139,7 @@ class TaskService
 
     /**
      * @return array
+     * @throws AssertionFailedException
      */
     public function getTasks()
     {
@@ -139,6 +150,7 @@ class TaskService
 
     /**
      * @return array
+     * @throws AssertionFailedException
      */
     public function getPersistedTasks()
     {
@@ -153,6 +165,8 @@ class TaskService
     /**
      * @param boolean
      * @return array
+     * @throws AssertionFailedException
+     * @throws Exception
      */
     public function getDynamicTasks($dueOnly = false)
     {
@@ -163,13 +177,13 @@ class TaskService
             $task = new Task($dynamicTask['expression'], $dynamicTask['implementation'], [], $dynamicTask['description']);
             $cacheKey = md5($dynamicTask['implementation']);
             $lastExecution = $this->dynamicTaskLastExecutionCache->get($cacheKey);
-            if ($dueOnly && ($lastExecution instanceof \DateTime && $now < $task->getNextExecution($lastExecution))) {
+            if ($dueOnly && ($lastExecution instanceof DateTime && $now < $task->getNextExecution($lastExecution))) {
                 continue;
             }
             $task->enable();
             $taskDecriptor = $this->getTaskDescriptor(TaskInterface::TYPE_DYNAMIC, $task);
 
-            $taskDecriptor['lastExecution'] = $lastExecution instanceof \DateTime ? $lastExecution->format(\DateTime::ISO8601) : '';
+            $taskDecriptor['lastExecution'] = $lastExecution instanceof DateTime ? $lastExecution->format(DateTime::ISO8601) : '';
             $taskDecriptor['identifier'] = md5($dynamicTask['implementation']);
             $tasks[$taskDecriptor['identifier']] = $taskDecriptor;
         }
@@ -180,6 +194,7 @@ class TaskService
      * @param string $type
      * @param Task $task
      * @return array
+     * @throws AssertionFailedException
      */
     public function getTaskDescriptor($type, Task $task)
     {
@@ -190,9 +205,9 @@ class TaskService
             'identifier' => $this->persistenceManager->getIdentifierByObject($task),
             'expression' => $task->getExpression(),
             'implementation' => $task->getImplementation(),
-            'nextExecution' => $task->getNextExecution() ? $task->getNextExecution()->format(\DateTime::ISO8601) : '',
+            'nextExecution' => $task->getNextExecution() ? $task->getNextExecution()->format(DateTime::ISO8601) : '',
             'nextExecutionTimestamp' => $task->getNextExecution() ? $task->getNextExecution()->getTimestamp() : 0,
-            'lastExecution' => $task->getLastExecution() ? $task->getLastExecution()->format(\DateTime::ISO8601) : '',
+            'lastExecution' => $task->getLastExecution() ? $task->getLastExecution()->format(DateTime::ISO8601) : '',
             'description' => $task->getDescription(),
             'object' => $task
         ];
@@ -204,6 +219,8 @@ class TaskService
      * @param array $arguments
      * @param string $description
      * @return Task
+     * @throws IllegalObjectTypeException
+     * @throws Exception
      */
     public function create($expression, $task, array $arguments, $description)
     {
@@ -215,6 +232,7 @@ class TaskService
 
     /**
      * @param Task $task
+     * @throws IllegalObjectTypeException
      */
     public function remove(Task $task)
     {
@@ -224,6 +242,8 @@ class TaskService
     /**
      * @param Task $task
      * @param string $type
+     * @throws IllegalObjectTypeException
+     * @throws \Neos\Cache\Exception
      */
     public function update(Task $task, $type)
     {
@@ -257,15 +277,15 @@ class TaskService
 
     /**
      * @param Task $task
-     * @return boolean
+     * @return void
      */
     protected function assertValidTask(Task $task)
     {
         if (!class_exists($task->getImplementation())) {
-            throw new \InvalidArgumentException(sprintf('Task implementation "%s" must exist', $task->getImplementation()), 1419296545);
+            throw new InvalidArgumentException(sprintf('Task implementation "%s" must exist', $task->getImplementation()), 1419296545);
         }
         if (!$this->reflexionService->isClassImplementationOf($task->getImplementation(), self::TASK_INTERFACE)) {
-            throw new \InvalidArgumentException('Task must implement TaskInterface', 1419296485);
+            throw new InvalidArgumentException('Task must implement TaskInterface', 1419296485);
         }
     }
 }

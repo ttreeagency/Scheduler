@@ -10,7 +10,9 @@ namespace Ttree\Scheduler\Domain\Model;
  *                                                                        */
 
 use Cron\CronExpression;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Ttree\Scheduler\Task\TaskInterface;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\ObjectManagement\ObjectManagerInterface;
@@ -56,18 +58,18 @@ class Task
     protected $argumentsHash;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     protected $creationDate;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      * @ORM\Column(nullable=true)
      */
     protected $lastExecution;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      * @ORM\Column(nullable=true)
      */
     protected $nextExecution;
@@ -82,12 +84,13 @@ class Task
      * @var string
      */
     protected $description;
-    
+
     /**
      * @param string $expression
      * @param string $implementation
      * @param array $arguments
      * @param string $description
+     * @throws Exception
      */
     public function __construct($expression, $implementation, array $arguments = [], $description = '')
     {
@@ -96,7 +99,7 @@ class Task
         $this->setImplementation($implementation);
         $this->setArguments($arguments);
         $this->setDescription($description);
-        $this->creationDate = new \DateTime('now');
+        $this->creationDate = new DateTime('now');
         $this->initializeNextExecution();
     }
 
@@ -113,6 +116,7 @@ class Task
 
     /**
      * @return boolean
+     * @throws Exception
      */
     public function isDue()
     {
@@ -121,7 +125,7 @@ class Task
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getPreviousRunDate()
     {
@@ -215,7 +219,9 @@ class Task
     /**
      * {@inheritdoc}
      *
+     * @param ObjectManagerInterface $objectManager
      * @return void
+     * @throws Exception
      */
     public function execute(ObjectManagerInterface $objectManager)
     {
@@ -234,7 +240,7 @@ class Task
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreationDate()
     {
@@ -242,7 +248,7 @@ class Task
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLastExecution()
     {
@@ -251,7 +257,7 @@ class Task
 
     /**
      * @param string
-     * @return \DateTime
+     * @return DateTime
      */
     public function getNextExecution($currentTime = null)
     {

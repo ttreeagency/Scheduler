@@ -10,6 +10,11 @@ namespace Ttree\Scheduler\Command;
  *                                                                        */
 
 use Assert\Assertion;
+use Assert\AssertionFailedException;
+use DateTime;
+use Exception;
+use Neos\Flow\Persistence\Exception\IllegalObjectTypeException;
+use Neos\Flow\Persistence\Exception\InvalidQueryException;
 use Ttree\Scheduler\Domain\Model\Task;
 use Ttree\Scheduler\Service\TaskService;
 use Ttree\Scheduler\Task\TaskInterface;
@@ -52,6 +57,8 @@ class TaskCommandController extends CommandController
      * Run all pending task
      *
      * @param boolean $dryRun do not execute tasks
+     * @throws AssertionFailedException
+     * @throws InvalidQueryException
      */
     public function runCommand($dryRun = false)
     {
@@ -77,9 +84,8 @@ class TaskCommandController extends CommandController
                 } else {
                     $this->tellStatus('[Skipped, dry run] Skipped "%s" (%s)', $arguments);
                 }
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 $task->markAsRun();
-                $this->tellStatus('[Error] Task "%s" (%s) throw an exception, check your log', $arguments);
             }
             $this->taskService->update($task, $taskDescriptor['type']);
         }
@@ -91,6 +97,7 @@ class TaskCommandController extends CommandController
 
     /**
      * List all tasks
+     * @throws AssertionFailedException
      */
     public function listCommand()
     {
@@ -120,6 +127,7 @@ class TaskCommandController extends CommandController
      * Run a single persisted task ignoring status and schedule.
      *
      * @param string $taskIdentifier
+     * @throws AssertionFailedException
      */
     public function runSingleCommand($taskIdentifier)
     {
@@ -135,9 +143,8 @@ class TaskCommandController extends CommandController
         try {
             $taskDescriptor['object']->execute($this->objectManager);
             $this->tellStatus('[Success] Run "%s" (%s)', $arguments);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $task->markAsRun();
-            $this->tellStatus('[Error] Task "%s" (%s) throw an exception, check your log', $arguments);
         }
 
         $this->taskService->update($task, $taskDescriptor['type']);
@@ -145,6 +152,7 @@ class TaskCommandController extends CommandController
 
     /**
      * @param Task $task
+     * @throws IllegalObjectTypeException
      */
     public function removeCommand(Task $task)
     {
@@ -155,6 +163,8 @@ class TaskCommandController extends CommandController
      * Enable the given persistent class
      *
      * @param Task $task persistent task identifier, see task:list
+     * @throws IllegalObjectTypeException
+     * @throws \Neos\Cache\Exception
      */
     public function enableCommand(Task $task)
     {
@@ -166,6 +176,8 @@ class TaskCommandController extends CommandController
      * Disable the given persistent class
      *
      * @param Task $task persistent task identifier, see task:list
+     * @throws IllegalObjectTypeException
+     * @throws \Neos\Cache\Exception
      */
     public function disableCommand(Task $task)
     {
@@ -180,6 +192,8 @@ class TaskCommandController extends CommandController
      * @param string $task task class implementation
      * @param string $arguments task arguments, can be a valid JSON array
      * @param string $description task description
+     * @throws AssertionFailedException
+     * @throws IllegalObjectTypeException
      */
     public function registerCommand($expression, $task, $arguments = null, $description = '')
     {
@@ -197,7 +211,7 @@ class TaskCommandController extends CommandController
     protected function tellStatus($message, array $arguments = null)
     {
         $message = vsprintf($message, $arguments);
-        $this->outputLine('%s: %s', [date(\DateTime::ISO8601), $message]);
+        $this->outputLine('%s: %s', [date(DateTime::ISO8601), $message]);
     }
 
     /**
