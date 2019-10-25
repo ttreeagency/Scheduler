@@ -10,6 +10,7 @@ namespace Ttree\Scheduler\Command;
  *                                                                        */
 
 use Assert\Assertion;
+use Neos\Flow\Persistence\PersistenceManagerInterface;
 use Ttree\Scheduler\Domain\Model\Task;
 use Ttree\Scheduler\Service\TaskService;
 use Ttree\Scheduler\Task\TaskInterface;
@@ -36,6 +37,12 @@ class TaskCommandController extends CommandController
      * @var ObjectManagerInterface
      */
     protected $objectManager;
+
+    /**
+     * @var PersistenceManagerInterface
+     * @Flow\Inject
+     */
+    protected $persistenceManager;
 
     /**
      * @Flow\InjectConfiguration(package="Ttree.Scheduler", path="allowParallelExecution")
@@ -70,6 +77,7 @@ class TaskCommandController extends CommandController
             $task = $taskDescriptor['object'];
             $arguments = [$task->getImplementation(), $taskDescriptor['identifier']];
 
+            $this->markTaskAsRun($task, $taskDescriptor['type']);
             try {
                 if (!$dryRun) {
                     $task->execute($this->objectManager);
@@ -78,10 +86,8 @@ class TaskCommandController extends CommandController
                     $this->tellStatus('[Skipped, dry run] Skipped "%s" (%s)', $arguments);
                 }
             } catch (\Exception $exception) {
-                $task->markAsRun();
                 $this->tellStatus('[Error] Task "%s" (%s) throw an exception, check your log', $arguments);
             }
-            $this->taskService->update($task, $taskDescriptor['type']);
         }
 
         if ($this->parallelExecutionLock instanceof Lock) {
@@ -132,15 +138,13 @@ class TaskCommandController extends CommandController
         $task = $taskDescriptor['object'];
         $arguments = [$task->getImplementation(), $taskDescriptor['identifier']];
 
+        $this->markTaskAsRun($task, $taskDescriptor['type']);
         try {
             $taskDescriptor['object']->execute($this->objectManager);
             $this->tellStatus('[Success] Run "%s" (%s)', $arguments);
         } catch (\Exception $exception) {
-            $task->markAsRun();
             $this->tellStatus('[Error] Task "%s" (%s) throw an exception, check your log', $arguments);
         }
-
-        $this->taskService->update($task, $taskDescriptor['type']);
     }
 
     /**
@@ -209,5 +213,19 @@ class TaskCommandController extends CommandController
         $task->setLastExecution(new \DateTime());
         $task->initializeNextExecution();
         $this->taskService->update($task, $taskType);
+    }
+
+    /**
+     * @param Task $task
+     * @param bool $taskType
+     */
+    protected function markTaskAsRun(Task $task, $taskType)
+    {
+        $task->markAsRun();
+        $this->taskService->update($task, $taskType);
+        if ($taskType === TaskInterface::TYPE_PERSISTED) {
+            $this->persistenceManager->whitelistObject($task);
+            $this->persistenceManager->persistAll(true);
+        }
     }
 }
