@@ -80,6 +80,7 @@ class Task
 
     /**
      * @var string
+     * @ORM\Column(type="text")
      */
     protected $description;
     
