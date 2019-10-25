@@ -176,7 +176,9 @@ class Task
      */
     public function setExpression($expression)
     {
-        $this->expression = $expression;
+        /* Slashes in annotaion expressions of dynamic tasks have to be double-escaped due to proxy classes.
+        For the cron expression, the remaining backslash needs to be removed here. */
+        $this->expression = str_replace('\\', '', $expression);
         $this->initializeNextExecution();
     }
 
