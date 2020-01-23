@@ -12,7 +12,8 @@
     "require": {
         "neos/flow": "^4.0 || ^5.0 || ^6.0",
         "mtdowling/cron-expression": "^1.2",
-        "beberlei/assert": "^2.7"
+        "beberlei/assert": "^2.7",
+        "neos/utility-lock": "^5.3"
     },
     "autoload": {
         "psr-4": {

@@ -11,6 +11,9 @@ namespace Ttree\Scheduler\Command;
 
 use Assert\Assertion;
 use Neos\Flow\Persistence\PersistenceManagerInterface;
+use Neos\Flow\Utility\Environment;
+use Neos\Utility\Files;
+use Neos\Utility\Lock\LockManager;
 use Ttree\Scheduler\Domain\Model\Task;
 use Ttree\Scheduler\Service\TaskService;
 use Ttree\Scheduler\Task\TaskInterface;
@@ -45,15 +48,40 @@ class TaskCommandController extends CommandController
     protected $persistenceManager;
 
     /**
+     * @var Environment
+     * @Flow\Inject
+     */
+    protected $environment;
+
+    /**
      * @Flow\InjectConfiguration(package="Ttree.Scheduler", path="allowParallelExecution")
      * @var boolean
      */
     protected $allowParallelExecution = true;
 
     /**
+     * @Flow\InjectConfiguration(package="Ttree.Scheduler", path="lockStrategyClassName")
+     * @var boolean
+     */
+    protected $lockStrategyClassName = '';
+
+    /**
      * @var Lock
      */
     protected $parallelExecutionLock;
+
+    /**
+     * @throws \Neos\Flow\Utility\Exception
+     * @throws \Neos\Utility\Exception\FilesException
+     */
+    public function initializeObject(): void
+    {
+        $lockManager = new LockManager($this->lockStrategyClassName, ['lockDirectory' => Files::concatenatePaths([
+            $this->environment->getPathToTemporaryDirectory(),
+            'Lock'
+        ])]);
+        Lock::setLockManager($lockManager);
+    }
 
     /**
      * Run all pending task
@@ -62,7 +90,6 @@ class TaskCommandController extends CommandController
      */
     public function runCommand($dryRun = false)
     {
-
         if ($this->allowParallelExecution !== true) {
             try {
                 $this->parallelExecutionLock = new Lock('Ttree.Scheduler.ParallelExecutionLock');
