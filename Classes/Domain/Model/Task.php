@@ -83,7 +83,7 @@ class Task
      * @ORM\Column(type="text")
      */
     protected $description;
-    
+
     /**
      * @param string $expression
      * @param string $implementation
@@ -267,7 +267,7 @@ class Task
     /**
      * @return String
      */
-    public function getDescription(): string 
+    public function getDescription()
     {
         return $this->description;
     }
