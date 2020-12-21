@@ -18,5 +18,10 @@
         "psr-4": {
             "Ttree\\Scheduler\\": "Classes"
         }
+    },
+    "extra": {
+        "applied-flow-migrations": [
+            "TYPO3.Form-20160601101500"
+        ]
     }
 }
