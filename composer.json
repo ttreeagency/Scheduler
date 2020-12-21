@@ -26,7 +26,8 @@
             "Neos.Form-20161124205254",
             "Neos.Party-20161124225257",
             "Neos.Imagine-20161124231742",
-            "Neos.SwiftMailer-20161130105617"
+            "Neos.SwiftMailer-20161130105617",
+            "Neos.Seo-20170127154600"
         ]
     }
 }
