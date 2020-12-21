@@ -10,7 +10,7 @@
         "runner"
     ],
     "require": {
-        "neos/flow": "^4.0 || ^5.0 || ^6.0 || ^7.0",
+        "neos/flow": "^7.0",
         "mtdowling/cron-expression": "^1.2",
         "beberlei/assert": "^2.7"
     },
