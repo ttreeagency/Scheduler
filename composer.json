@@ -10,7 +10,7 @@
         "runner"
     ],
     "require": {
-        "neos/flow": "^4.0 || ^5.0 || ^6.0",
+        "neos/flow": "^7.0",
         "mtdowling/cron-expression": "^1.2",
         "beberlei/assert": "^2.7"
     },
@@ -18,5 +18,28 @@
         "psr-4": {
             "Ttree\\Scheduler\\": "Classes"
         }
+    },
+    "extra": {
+        "applied-flow-migrations": [
+            "TYPO3.Form-20160601101500",
+            "Neos.Twitter.Bootstrap-20161124204912",
+            "Neos.Form-20161124205254",
+            "Neos.Party-20161124225257",
+            "Neos.Imagine-20161124231742",
+            "Neos.SwiftMailer-20161130105617",
+            "Neos.Seo-20170127154600",
+            "Neos.Flow-20180415105700",
+            "Neos.Neos-20180907103800",
+            "Neos.Neos.Ui-20190319094900",
+            "Neos.Flow-20190425144900",
+            "Neos.Flow-20190515215000",
+            "Neos.NodeTypes-20190917101945",
+            "Neos.NodeTypes-20200120114136",
+            "Neos.Flow-20200813181400",
+            "Neos.Flow-20201003165200",
+            "Neos.Flow-20201109224100",
+            "Neos.Flow-20201205172733",
+            "Neos.Flow-20201207104500"
+        ]
     }
 }

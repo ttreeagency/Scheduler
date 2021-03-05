@@ -83,7 +83,7 @@ class Task
      * @ORM\Column(type="text")
      */
     protected $description;
-    
+
     /**
      * @param string $expression
      * @param string $implementation
