@@ -1,6 +1,7 @@
 Ttree:
   Scheduler:
     allowParallelExecution: true
+    lockStrategyClassName: 'Neos\Utility\Lock\FlockLockStrategy'
 Neos:
   Flow:
     object:
