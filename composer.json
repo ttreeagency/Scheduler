@@ -13,7 +13,7 @@
         "neos/flow": "^7.0 || ^8.0",
         "mtdowling/cron-expression": "^1.2",
         "beberlei/assert": "^2.7",
-        "neos/utility-lock": "^5.3"
+        "neos/utility-lock": "^5.3 || ^6.0"
     },
     "autoload": {
         "psr-4": {
