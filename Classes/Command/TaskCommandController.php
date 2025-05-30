@@ -251,7 +251,7 @@ class TaskCommandController extends CommandController
         $task->markAsRun();
         $this->taskService->update($task, $taskType);
         if ($taskType === TaskInterface::TYPE_PERSISTED) {
-            $this->persistenceManager->whitelistObject($task);
+            $this->persistenceManager->allowObject($task);
             $this->persistenceManager->persistAll(true);
         }
     }
