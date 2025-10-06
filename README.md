@@ -35,6 +35,17 @@ class MyTask implements \Ttree\Scheduler\Task\TaskInterface {
 }
 ```
 
+or
+
+```php
+use Ttree\Scheduler\Annotations as Scheduler;
+
+#[Scheduler\Schedule(["expression" => "* * * * *"])]
+class MyTask implements \Ttree\Scheduler\Task\TaskInterface {
+	// ...
+}
+```
+
 This task will be executed every minute. Dynamic task do not support arguments, the ``$arguments`` of the execute method
 is always an empty array.
 
@@ -47,6 +58,13 @@ use Ttree\Scheduler\Annotations as Scheduler;
 /**
  * @Scheduler\Meta(description="Describes your task.")
  */
+```
+
+or
+
+```php
+use Ttree\Scheduler\Annotations as Scheduler;
+#[Scheduler\Meta(["description" => "Describes your task."])]
 ```
 
 Persisted Tasks
