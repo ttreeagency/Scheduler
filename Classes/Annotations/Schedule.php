@@ -15,6 +15,7 @@ use Neos\Flow\Annotations as Flow;
  * @Annotation
  * @Target("CLASS")
  */
+#[\Attribute(\Attribute::TARGET_CLASS)]
 final class Schedule
 {
 
