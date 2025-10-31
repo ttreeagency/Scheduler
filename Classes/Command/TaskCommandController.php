@@ -233,17 +233,6 @@ class TaskCommandController extends CommandController
 
     /**
      * @param Task $task
-     * @param string $taskType
-     */
-    protected function markFailedTaskAsRun(Task $task, $taskType)
-    {
-        $task->setLastExecution(new \DateTime());
-        $task->initializeNextExecution();
-        $this->taskService->update($task, $taskType);
-    }
-
-    /**
-     * @param Task $task
      * @param bool $taskType
      */
     protected function markTaskAsRun(Task $task, $taskType)
@@ -251,7 +240,7 @@ class TaskCommandController extends CommandController
         $task->markAsRun();
         $this->taskService->update($task, $taskType);
         if ($taskType === TaskInterface::TYPE_PERSISTED) {
-            $this->persistenceManager->whitelistObject($task);
+            $this->persistenceManager->allowObject($task);
             $this->persistenceManager->persistAll(true);
         }
     }
